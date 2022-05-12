@@ -1,0 +1,34 @@
+
+
+language: node_js
+node_js:
+  - 12
+
+services:
+  - docker
+
+# Pre-testing installs
+install:
+  - echo "nothing needs to be installed"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests"
+
+# Assuming the .travis.yml file is in the project directory, and there is a separate sub-directory for each service
+# Use either `docker-compose` or individual `docker build` commands
+# Build
+script:
+  - docker build -t udagram-frontend ./udagram-frontend
+# Do similar for other three images
+
+# Tagging
+  - docker tag udagram-frontend huynhnv2/udagram-frontend:v1
+# Do similar for other three images
+
+# Push
+# Assuming DOCKER_PASSWORD and DOCKER_USERNAME are set in the Travis repository settings
+after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push huynhnv2/udagram-frontend:v1
+# Do similar for other three images
